@@ -1,9 +1,11 @@
 from sklearn.metrics import confusion_matrix
 from sklearn.svm import LinearSVC
+
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
-
+import sklearn.metrics as metrics
 
 import numpy as np
 import pandas as pd
@@ -45,20 +47,28 @@ target_names = ['20','30','50','60','70','left turn', 'right turn',
 
 
 #train the linear classification
-print("[INFO] training Linear SVM classifier...")
-model = LinearSVC()
+print("[INFO] training Linear classifier...")
+model = LogisticRegression()
 model.fit(trainData, trainLabels.ravel())
 
 #evaluate the classifier
 print("[INFO] evaluating classifier...")
 predications = model.predict(testData)
-print(classification_report(testLabels.ravel(), predications, 
-    target_names=target_names))
+
+
+print("The first five prediction {}".format(predications))
+print("The real first five labels {}".format(testLabels.ravel()))
+
+mse = metrics.mean_squared_error(testLabels, predications)
+print("Mean Squared Error {}".format(mse))
+
+
+print(classification_report(testLabels.ravel(), predications, target_names=target_names))
 
 label_numbers = [0,1,2,3,4,5,6,7,8,9]
 
 print("confusion_matrix")
 print(confusion_matrix(testLabels, predications, labels = label_numbers))
 
-#scores = cross_val_score(model, data_array, labels_array.ravel(), cv = 10)
-#print("Accuracy: %0.f (+/- %0.2f)" % (scores.mean(), scores.std()*2))
+scores = cross_val_score(model, data_array, labels_array.ravel(), cv = 10)
+print("Accuracy: %0.f (+/- %0.2f)" % (scores.mean(), scores.std()*2))
