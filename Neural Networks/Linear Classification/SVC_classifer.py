@@ -24,7 +24,7 @@ y_data = pd.read_csv(y_train_smpl)
 data_array = x_data.values
 labels_array = y_data.values 
 
-(trainData, testData, trainLabels, testLabels) = train_test_split(
+(X_train, X_test, y_train, y_test) = train_test_split(
     data_array, labels_array, test_size = 0.15, random_state=42
 ) #75% for training 25% for testing
 
@@ -48,27 +48,24 @@ target_names = ['20','30','50','60','70','left turn', 'right turn',
 
 #train the linear classification
 print("[INFO] training Linear classifier...")
-model = LogisticRegression()
-model.fit(trainData, trainLabels.ravel())
+model = LinearSVC()
+model.fit(X_train, y_train.ravel())
 
 #evaluate the classifier
 print("[INFO] evaluating classifier...")
-predications = model.predict(testData)
+predications = model.predict(X_test)
 
 
 print("The first five prediction {}".format(predications))
-print("The real first five labels {}".format(testLabels.ravel()))
+print("The real first five labels {}".format(y_test.ravel()))
 
-mse = metrics.mean_squared_error(testLabels, predications)
+mse = metrics.mean_squared_error(y_test, predications)
 print("Mean Squared Error {}".format(mse))
 
 
-print(classification_report(testLabels.ravel(), predications, target_names=target_names))
+print(classification_report(y_test.ravel(), predications, target_names=target_names))
 
 label_numbers = [0,1,2,3,4,5,6,7,8,9]
 
 print("confusion_matrix")
-print(confusion_matrix(testLabels, predications, labels = label_numbers))
-
-scores = cross_val_score(model, data_array, labels_array.ravel(), cv = 10)
-print("Accuracy: %0.f (+/- %0.2f)" % (scores.mean(), scores.std()*2))
+print(confusion_matrix(y_test, predications, labels = label_numbers))

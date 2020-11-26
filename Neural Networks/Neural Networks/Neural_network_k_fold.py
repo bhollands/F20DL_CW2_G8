@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import cv2
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import KFold
 
 #import the data
 x_train_smpl = "x_train_gr_smpl_reduced.csv"
@@ -17,8 +18,12 @@ y_data = pd.read_csv(y_train_smpl)
 data_array = x_data.values
 labels_array = y_data.values 
 
-(X_train, X_test, y_train, y_test) = train_test_split(
-    data_array, labels_array, test_size = 0.15, random_state=42)
+kf = KFold(n_splits=10, shuffle=True)
+
+for train_index, test_index in kf.split(data_array):
+    #print("Train:", train_index, "Test:", test_index)
+    X_train, X_test = data_array[train_index], data_array[test_index]
+    y_train, y_test = labels_array[train_index], labels_array[test_index]
 
 class_names = np.array(['20 kph','30 kph','50 kph','60 kph','70 kph','left turn kph', 'right turn kph',
                 'predestrian crossing', 'children', 'cycle route ahead'])
