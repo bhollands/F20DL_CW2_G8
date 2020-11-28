@@ -6,12 +6,12 @@ from sklearn.model_selection import train_test_split
 import cv2
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
-
+np.random.seed(7)
 #import the data
-x_train_smpl = "x_train_gr_smpl_reduced.csv"
-x_test_smpl = "x_test_gr_smpl_reduced.csv"
-y_train_smpl = "y_train_smpl.csv"
-y_test_smpl = "y_test_smpl.csv"
+x_train_smpl = "Original datasets/x_train_gr_smpl_reduced.csv"
+x_test_smpl = "Original datasets/x_test_gr_smpl_reduced.csv"
+y_train_smpl = "Original datasets/y_train_smpl.csv"
+y_test_smpl = "Original datasets/y_test_smpl.csv"
 
 x_train_data = pd.read_csv(x_train_smpl)
 y_train_data = pd.read_csv(y_train_smpl)
@@ -23,6 +23,18 @@ y_train = y_train_data.values
 
 X_test = x_test_data.values
 y_test = y_test_data.values
+
+train_indices = np.arange(X_train.shape[0])
+np.random.shuffle(train_indices)
+X_train = X_train[train_indices]
+y_train = y_train[train_indices]
+
+test_indices = np.arange(X_test.shape[0])
+np.random.shuffle(test_indices)
+X_test = X_test[test_indices]
+y_test = y_test[test_indices]
+
+
 
 # (X_train, X_test, y_train, y_test) = train_test_split(
 #     data_array, labels_array, test_size = 0.15, random_state=42)
@@ -94,58 +106,58 @@ print(confusion_matrix(y_test, y_pred_bool, labels = label_numbers))
 '''
 uncomment below to see cool diagrams
 '''
-# print(class_names[np.argmax(y_pred[3])])
-# plt.imshow(X_test[3].reshape(35,35))
-# plt.colorbar()
-# plt.grid(False)
-# plt.show()
+print(class_names[np.argmax(y_pred[3])])
+plt.imshow(X_test[3].reshape(35,35))
+plt.colorbar()
+plt.grid(False)
+plt.show()
 
 
-# def plot_value_array(i, predictions_array, true_label):
-#     predictions_array, true_label = predictions_array, true_label.item(i)
-#     plt.grid(False)
-#     plt.xticks(range(10))
-#     plt.yticks([])
-#     thisplot = plt.bar(range(10), predictions_array, color="#777777")
-#     plt.ylim([0,1])
-#     predicted_label = np.argmax(predictions_array)
-#     thisplot[predicted_label].set_color('red')
-#     thisplot[true_label].set_color('blue')
+def plot_value_array(i, predictions_array, true_label):
+    predictions_array, true_label = predictions_array, true_label.item(i)
+    plt.grid(False)
+    plt.xticks(range(10))
+    plt.yticks([])
+    thisplot = plt.bar(range(10), predictions_array, color="#777777")
+    plt.ylim([0,1])
+    predicted_label = np.argmax(predictions_array)
+    thisplot[predicted_label].set_color('red')
+    thisplot[true_label].set_color('blue')
 
-# def plot_image(i, predictions_array, true_label, img):
+def plot_image(i, predictions_array, true_label, img):
     
-#     predictions_array, true_label, img = predictions_array, true_label[i], img[i].reshape(35,35)
-#     plt.grid(False)
-#     plt.xticks([])
-#     plt.yticks([])
-#     plt.imshow(img, cmap=plt.cm.binary)
-#     predicted_label = np.argmax(predictions_array)
-#     if predicted_label == true_label:
-#         color = 'blue'
-#     else:
-#         color = 'red'
+    predictions_array, true_label, img = predictions_array, true_label[i], img[i].reshape(35,35)
+    plt.grid(False)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(img, cmap=plt.cm.binary)
+    predicted_label = np.argmax(predictions_array)
+    if predicted_label == true_label:
+        color = 'blue'
+    else:
+        color = 'red'
 
-#     plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
-#                                 100*np.max(predictions_array),
-#                                 class_names[true_label]),
-#                                 color=color)
+    plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
+                                100*np.max(predictions_array),
+                                class_names[true_label]),
+                                color=color)
                             
-# # i = 12
-# # plt.figure(figsize=(6,3))
-# # plt.subplot(1,2,1)
-# # plot_image(i, classifications[i], y_test, X_test)
-# # plt.subplot(1,2,2)
-# # plot_value_array(i,classifications[i], y_test)
-# # plt.show()
-
-# num_rows = 15
-# num_cols = 3
-# num_images = num_cols*num_rows
-# plt.figure(figsize=(2*2*num_cols, 2*num_rows))
-# for i in range(num_images):
-#     plt.subplot(num_rows, 2*num_cols, 2*i+1)
-#     plot_image(i, y_pred[i], y_test, X_test)
-#     plt.subplot(num_rows, 2*num_cols, 2*i+2)
-#     plot_value_array(i, y_pred[i], y_test)
-# plt.tight_layout()
+# i = 12
+# plt.figure(figsize=(6,3))
+# plt.subplot(1,2,1)
+# plot_image(i, classifications[i], y_test, X_test)
+# plt.subplot(1,2,2)
+# plot_value_array(i,classifications[i], y_test)
 # plt.show()
+
+num_rows = 15
+num_cols = 3
+num_images = num_cols*num_rows
+plt.figure(figsize=(2*2*num_cols, 2*num_rows))
+for i in range(num_images):
+    plt.subplot(num_rows, 2*num_cols, 2*i+1)
+    plot_image(i, y_pred[i], y_test, X_test)
+    plt.subplot(num_rows, 2*num_cols, 2*i+2)
+    plot_value_array(i, y_pred[i], y_test)
+plt.tight_layout()
+plt.show()

@@ -9,8 +9,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import KFold
 
 #import the data
-x_train_smpl = "x_train_gr_smpl_reduced.csv"
-y_train_smpl = "y_train_smpl.csv"
+x_train_smpl = "Original datasets/x_train_gr_smpl_reduced.csv"
+y_train_smpl = "Original datasets/y_train_smpl.csv"
 
 x_data = pd.read_csv(x_train_smpl)
 y_data = pd.read_csv(y_train_smpl)
