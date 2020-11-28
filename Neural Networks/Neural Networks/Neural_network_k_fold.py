@@ -8,6 +8,8 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import KFold
 
+np.random.seed(7)
+
 #import the data
 x_train_smpl = "Original datasets/x_train_gr_smpl_reduced.csv"
 y_train_smpl = "Original datasets/y_train_smpl.csv"
@@ -15,8 +17,13 @@ y_train_smpl = "Original datasets/y_train_smpl.csv"
 x_data = pd.read_csv(x_train_smpl)
 y_data = pd.read_csv(y_train_smpl)
 
-data_array = x_data.values
-labels_array = y_data.values 
+data_array = x_data.values #X_train
+labels_array = y_data.values #y_train
+
+train_indices = np.arange(data_array.shape[0])
+np.random.shuffle(train_indices)
+data_array = data_array[train_indices]
+labels_array = labels_array[train_indices]
 
 kf = KFold(n_splits=10, shuffle=True)
 

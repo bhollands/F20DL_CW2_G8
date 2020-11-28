@@ -24,6 +24,9 @@ y_train = y_train_data.values
 X_test = x_test_data.values
 y_test = y_test_data.values
 
+'''
+Randomising
+'''
 train_indices = np.arange(X_train.shape[0])
 np.random.shuffle(train_indices)
 X_train = X_train[train_indices]
