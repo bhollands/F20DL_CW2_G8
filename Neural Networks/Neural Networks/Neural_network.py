@@ -9,18 +9,25 @@ from sklearn.metrics import confusion_matrix
 
 #import the data
 x_train_smpl = "x_train_gr_smpl_reduced.csv"
+x_test_smpl = "x_test_gr_smpl_reduced.csv"
 y_train_smpl = "y_train_smpl.csv"
+y_test_smpl = "y_test_smpl.csv"
 
-x_data = pd.read_csv(x_train_smpl)
-y_data = pd.read_csv(y_train_smpl)
+x_train_data = pd.read_csv(x_train_smpl)
+y_train_data = pd.read_csv(y_train_smpl)
+x_test_data = pd.read_csv(x_test_smpl)
+y_test_data = pd.read_csv(y_test_smpl)
 
-data_array = x_data.values
-labels_array = y_data.values 
+X_train = x_train_data.values
+y_train = y_train_data.values
 
-(X_train, X_test, y_train, y_test) = train_test_split(
-    data_array, labels_array, test_size = 0.15, random_state=42)
+X_test = x_test_data.values
+y_test = y_test_data.values
 
-class_names = np.array(['20 kph','30 kph','50 kph','60 kph','70 kph','left turn kph', 'right turn kph',
+# (X_train, X_test, y_train, y_test) = train_test_split(
+#     data_array, labels_array, test_size = 0.15, random_state=42)
+
+class_names = np.array(['20 kph','30 kph','50 kph','60 kph','70 kph','left turn', 'right turn',
                 'predestrian crossing', 'children', 'cycle route ahead'])
 
 
@@ -58,7 +65,8 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(10, activation='softmax')
 ])
 
-opt = tf.keras.optimizers.Adam(learning_rate=0.01)
+opt = tf.keras.optimizers.SGD(
+    learning_rate=0.01, momentum=0.0, nesterov=False, name="SGD")
 
 
 model.compile(optimizer=opt,
@@ -83,11 +91,10 @@ print("confusion_matrix")
 print(confusion_matrix(y_test, y_pred_bool, labels = label_numbers))
 
 
-
-
-
-
-# print(class_names[np.argmax(classifications[3])])
+'''
+uncomment below to see cool diagrams
+'''
+# print(class_names[np.argmax(y_pred[3])])
 # plt.imshow(X_test[3].reshape(35,35))
 # plt.colorbar()
 # plt.grid(False)
@@ -137,8 +144,8 @@ print(confusion_matrix(y_test, y_pred_bool, labels = label_numbers))
 # plt.figure(figsize=(2*2*num_cols, 2*num_rows))
 # for i in range(num_images):
 #     plt.subplot(num_rows, 2*num_cols, 2*i+1)
-#     plot_image(i, classifications[i], y_test, X_test)
+#     plot_image(i, y_pred[i], y_test, X_test)
 #     plt.subplot(num_rows, 2*num_cols, 2*i+2)
-#     plot_value_array(i, classifications[i], y_test)
+#     plot_value_array(i, y_pred[i], y_test)
 # plt.tight_layout()
 # plt.show()

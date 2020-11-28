@@ -45,16 +45,6 @@ y_train.flatten()
 print(y_train[0])
 
 
-# plt.figure(figsize=(15,15))
-# for i in range(25):
-#     plt.subplot(5,5,i+1)
-#     plt.xticks([])
-#     plt.yticks([])
-#     plt.grid(False)
-#     plt.imshow(X_train[i].reshape(35,35), cmap=plt.cm.binary)
-    
-#     plt.xlabel(class_names[y_train[i]])
-#plt.show()
 
 model = tf.keras.Sequential([
     #tf.keras.layers.Flatten(input_shape=(1225)),
@@ -63,7 +53,9 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(10, activation='softmax')
 ])
 
-opt = tf.keras.optimizers.Adam(learning_rate=0.01)
+opt = tf.keras.optimizers.SGD(
+    learning_rate=0.01, momentum=0.0, nesterov=False, name="SGD")
+
 
 
 model.compile(optimizer=opt,
