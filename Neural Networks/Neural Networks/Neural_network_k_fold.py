@@ -32,18 +32,11 @@ for train_index, test_index in kf.split(data_array):
     X_train, X_test = data_array[train_index], data_array[test_index]
     y_train, y_test = labels_array[train_index], labels_array[test_index]
 
-class_names = np.array(['20 kph','30 kph','50 kph','60 kph','70 kph','left turn kph', 'right turn kph',
+class_names = np.array(['20 kph','30 kph','50 kph','60 kph','70 kph','left turn', 'right turn',
                 'predestrian crossing', 'children', 'cycle route ahead'])
-
 
 # #image = X_train[1].reshape(35,35)
 
-# plt.figure()
-# plt.imshow(image)
-# plt.colorbar()
-# plt.grid(False)
-
-#plt.show()
 #normalising
 X_train = X_train / 255.0
 X_test = X_test /255.0
@@ -51,35 +44,34 @@ X_test = X_test /255.0
 y_train.flatten()
 print(y_train[0])
 
-
+EPOCHS = 25
 
 model = tf.keras.Sequential([
     #tf.keras.layers.Flatten(input_shape=(1225)),
     tf.keras.layers.Dense(1225, activation='relu'),
     tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dense(128, activation='relu'),
+    #tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(10, activation='softmax')
 ])
 
 opt = tf.keras.optimizers.SGD(
-    learning_rate=0.01, momentum=0.0, nesterov=False, name="SGD")
-
-
+    learning_rate=0.07, momentum=0.04, nesterov=False, name="SGD")
 
 model.compile(optimizer=opt,
               loss = 'sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-history = model.fit(x = X_train, y = y_train, epochs=10)
+history = model.fit(x = X_train, y = y_train, epochs=EPOCHS)
 
 test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
 print('\nTest accuracy:', test_acc)
-
 
 y_pred = model.predict(X_test, batch_size=64, verbose=1)
 y_pred_bool = np.argmax(y_pred, axis=1)
 
 print(classification_report(y_test, y_pred_bool, target_names=class_names))
-
 
 label_numbers = [0,1,2,3,4,5,6,7,8,9]
 
