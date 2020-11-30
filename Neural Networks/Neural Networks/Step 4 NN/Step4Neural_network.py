@@ -8,10 +8,10 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 np.random.seed(7)
 #import the data
-x_train_smpl = "Step 4 data/X_train_random_reduced.csv"
-x_test_smpl = "Step 4 data/X_test_random_reduced.csv"
-y_train_smpl = "Step 4 data/y_train_random_reduced.csv"
-y_test_smpl = "Step 4 data/y_test_random_reduced.csv"
+x_train_smpl = "Step 4 data/X_train_random_reduced_4000.csv"
+x_test_smpl = "Step 4 data/X_test_random_reduced_4000.csv"
+y_train_smpl = "Step 4 data/y_train_random_reduced_4000.csv"
+y_test_smpl = "Step 4 data/y_test_random_reduced_4000.csv"
 
 x_train_data = pd.read_csv(x_train_smpl)
 y_train_data = pd.read_csv(y_train_smpl)
