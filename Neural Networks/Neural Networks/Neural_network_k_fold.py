@@ -44,19 +44,17 @@ X_test = X_test /255.0
 y_train.flatten()
 
 
-EPOCHS = 2
+EPOCHS = 10
 
 model = tf.keras.Sequential([
     #tf.keras.layers.Flatten(input_shape=(1225)),
     tf.keras.layers.Dense(1225, activation='relu'),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(10, activation='softmax')
 ])
 
 opt = tf.keras.optimizers.SGD(
-    learning_rate=0.6, momentum=0.03, nesterov=False, name="SGD")
+    learning_rate=0.01, momentum=0.03, nesterov=False, name="SGD")
 
 model.compile(optimizer=opt,
               loss = 'sparse_categorical_crossentropy',
@@ -76,11 +74,6 @@ label_numbers = [0,1,2,3,4,5,6,7,8,9]
 
 print("confusion_matrix")
 print(confusion_matrix(y_test, y_pred_bool, labels = label_numbers))
-
-
-
-
-
 
 print(class_names[np.argmax(y_pred[3])])
 plt.imshow(X_test[3].reshape(35,35))

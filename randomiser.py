@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import cv2
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
 
 np.random.seed(7)
 
